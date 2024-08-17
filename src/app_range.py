@@ -5,11 +5,11 @@ from prepare_data import *
 
 def main():
     # Strategy 1 : Spain
-    # country = "spain"  # spain
+    # country = "spain"  # spain, 1.7 - 2.1
     # min_coef = 1.7
     # max_coef = 2.1
 
-    # Strategy 2 : UK
+    # Strategy 2 : UK, 1.5 - 1.99
     country = "uk"
     min_coef = 1.5
     max_coef = 1.99

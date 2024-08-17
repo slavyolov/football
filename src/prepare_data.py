@@ -146,6 +146,13 @@ def determine_winning_bet(data, bet_strategy):
     2       2    2.5    3.4    3.1   X          0.2893        False           max_coef
     3       X    3.0    3.0    2.9   X          0.3295         True           max_coef
 
+    >>> df = determine_winning_bet(data, bet_strategy='btts')
+    >>> df[['B365H', 'B365D', 'B365A', 'Bet', 'Win Probability', 'Winning_Bet', 'betting_strateggy']]
+       B365H  B365D  B365A   Bet  Win Probability  Winning_Bet betting_strateggy
+    0    1.8    3.4    4.2  BTTS              0.5         True               btts
+    1    2.5    3.4    2.5  BTTS              0.5         True               btts
+    2    2.5    3.4    3.1  BTTS              0.5         True               btts
+    3    3.0    3.0    2.9  BTTS              0.5        False               btts
     """
 
     # Recode the FTR field to numeric: 1 for Home Win, X for Draw, and 2 for Away Win
@@ -178,11 +185,17 @@ def determine_winning_bet(data, bet_strategy):
     elif bet_strategy == 'away':
         data['Bet'] = '2'
         data['Win Probability'] = data['Win Probabilities'].apply(lambda x: x[2])
+    elif bet_strategy == 'btts':
+        data['Bet'] = 'BTTS'
+        data['Coefficient'] = 1.8 # Assuming avq coef. of 1.8
+        data['Win Probability'] = 0.5
+        data['Winning_Bet'] = (data['FTHG'] > 0) & (data['FTAG'] > 0)  # Both Teams To Score (BTTS)
     else:
         raise ValueError(f"Invalid bet strategy: {bet_strategy}")
 
     # Determine whether the bet was successful by comparing Bet with FTR_num
-    data['Winning_Bet'] = data['Bet'] == data['FTR_num']  # CHANGED
+    if bet_strategy != 'btts':
+        data['Winning_Bet'] = data['Bet'] == data['FTR_num']
 
     data["betting_strateggy"] = bet_strategy
 
