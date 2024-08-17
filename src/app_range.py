@@ -4,15 +4,24 @@ from prepare_data import *
 
 
 def main():
+    # Strategy 1 : Spain
+    # country = "spain"  # spain
+    # min_coef = 1.7
+    # max_coef = 2.1
+
+    # Strategy 2 : UK
+    country = "uk"
+    min_coef = 1.5
+    max_coef = 1.99
+
     files = [
-        "C:/Users/natal/Documents/Python Scripts/football/data/uk/2021_2022.csv",
-        "C:/Users/natal/Documents/Python Scripts/football/data/uk/2022_2023.csv",
-        "C:/Users/natal/Documents/Python Scripts/football/data/uk/2023_2024.csv"
+        f"C:/Users/natal/Documents/Python Scripts/football/data/{country}/2021_2022.csv",
+        f"C:/Users/natal/Documents/Python Scripts/football/data/{country}/2022_2023.csv",
+        f"C:/Users/natal/Documents/Python Scripts/football/data/{country}/2023_2024.csv"
     ]
 
     # PARAMETERS # TODO: put these in a cfg file
-    min_coef = 1.5
-    max_coef = 1.99
+
     strategy = 'range_coef'  # min_coef; range_coef
     bet_strategy = 'min_coef'  # TODO: refactor the code for home and away games, maybe also draw
     write_csv = True
@@ -26,18 +35,18 @@ def main():
         statistics, data_final = apply_dalembert_system(data=data_ext)
         if write_csv:
             data_final.to_csv(
-                f"C:/Users/natal/Documents/Python Scripts/football/output_data/uk/{strategy}_{bet_strategy}_results_{year}.csv",
+                f"C:/Users/natal/Documents/Python Scripts/football/output_data/{country}/{strategy}_{bet_strategy}_results_{year}.csv",
                 index=False)
 
         # Plotting :
-        bank_balance_path = f'C:/Users/natal/Documents/Python Scripts/football/output_data/uk/bank_balance_{year}_coef_{min_coef}_{max_coef}.png'
+        bank_balance_path = f'C:/Users/natal/Documents/Python Scripts/football/output_data/{country}/bank_balance_{year}_coef_{min_coef}_{max_coef}.png'
         plot_bank_balance(year, min_coef, max_coef,
                           statistics['dalembert_bank_progress'], statistics['total_profit_dalembert'],
                           statistics['roi_dalembert'], statistics['win_ratio'],
                           save_path=bank_balance_path
                           )
 
-        streak_path = f'C:/Users/natal/Documents/Python Scripts/football/output_data/uk/bets_and_streaks_{year}_coef_{min_coef}_{max_coef}.png'
+        streak_path = f'C:/Users/natal/Documents/Python Scripts/football/output_data/{country}/bets_and_streaks_{year}_coef_{min_coef}_{max_coef}.png'
         plot_bets_and_streaks(year, min_coef,
                               statistics['streaks_bets_df'], streak_path)
 
